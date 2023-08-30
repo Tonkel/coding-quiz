@@ -44,3 +44,25 @@ header {
   color: white;
   border-radius: 10px;
 }
+
+#start-button:hover {
+  opacity: 0.5;
+}
+
+#slide-question {
+  text-align: start;
+}
+
+#slide-button {
+  align-self: flex-start;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  padding-left: 5px;
+  width: 75%;
+  height: 50px;
+  border: 3px solid purple;
+  background-color: palevioletred;
+  color: white;
+  border-radius: 10px;
+  text-align: left;
+}

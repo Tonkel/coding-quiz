@@ -4,8 +4,11 @@ var timerEl = document.querySelector("#timer");
 var contentEl = document.querySelector("#content");
 var startQuizEl = document.querySelector("#start-button");
 //Data
-var questionCard = 0;
+var correctAnswers = 0;
+var incorrectAnswers = 0;
+var questionNumber = 0;
 var timeLeft = 60;
+//save so can stop timer when required
 var stopTime;
 var objects = [
   (obj1 = {
@@ -33,8 +36,9 @@ var objects = [
 ];
 
 //Functions
+
 //create a function that generates a div with an h1, paragraph explaining what the quiz is, and a start quiz button
-function startQuiz() {
+function loadPage() {
   //create
   var headerEl = document.createElement("h1");
   //build
@@ -52,14 +56,89 @@ function startQuiz() {
   //now do the same with a button
   var buttonEl = document.createElement("button");
   buttonEl.setAttribute("id", "start-button");
+  buttonEl.setAttribute("type", "button");
   buttonEl.textContent = "Start Quiz";
   contentEl.appendChild(buttonEl);
 
-  console.log(objects[0]);
+  buttonEl.addEventListener("click", startQuiz);
 }
 
-//create a function that deletes the DOM elements that we just created, and a function that replaces them with newly created elements in quiz format, while adding 1 to the question card data, so we can iterate through the list of objects that represent each "slide"
-//User Interactions
+//function to start a timer
+function startTime() {
+  // Sets interval in variable
+  var timerInterval = setInterval(function () {
+    timeLeft--;
+    timerEl.textContent = "Time Left: " + timeLeft;
+
+    if (timeLeft === 0) {
+      // Stops execution of action at set interval
+      clearInterval(timerInterval);
+    }
+    console.log(timeLeft);
+  }, 1000);
+  return timerInterval;
+}
+
+//function to delete elements in content section
+function deleteChildren() {
+  while (contentEl.firstChild) {
+    contentEl.removeChild(contentEl.lastChild);
+  }
+}
+
+//function to create elements with content based on which question slide we are on
+function createSlide(questionNumber, questionInfo) {
+  //store question answer and explanation
+  var questionAnswer = questionInfo[questionNumber]["answer"];
+  var questionExplanation = questionInfo[questionNumber]["explanation"];
+
+  var headerEl = document.createElement("h1");
+  //create question
+  headerEl.textContent = questionInfo[questionNumber]["question"];
+  headerEl.setAttribute("id", "slide-question");
+  contentEl.appendChild(headerEl);
+
+  //create buttons
+  buttonA = document.createElement("button");
+  buttonA.textContent = "A) " + questionInfo[questionNumber]["a"];
+  buttonA.setAttribute("id", "slide-button");
+  contentEl.appendChild(buttonA);
+
+  buttonB = document.createElement("button");
+  buttonB.textContent = "B) " + questionInfo[questionNumber]["b"];
+  buttonB.setAttribute("id", "slide-button");
+  contentEl.appendChild(buttonB);
+
+  buttonC = document.createElement("button");
+  buttonC.textContent = "C) " + questionInfo[questionNumber]["c"];
+  buttonC.setAttribute("id", "slide-button");
+  contentEl.appendChild(buttonC);
+
+  buttonD = document.createElement("button");
+  buttonD.textContent = "D) " + questionInfo[questionNumber]["d"];
+  buttonD.setAttribute("id", "slide-button");
+  contentEl.appendChild(buttonD);
+
+  //if user clicks correct answer, display congradulatory message under buttons
+
+  //adds 1 to slide counter
+  questionNumber++;
+
+  //if questionnumber === objects.length build highscore page
+}
+
+function startQuiz() {
+  //start timer and store interval for later
+  stopTime = startTime();
+
+  //delete elements
+  deleteChildren();
+
+  //create new slide
+  createSlide(questionNumber, objects);
+}
+//create a function that starts the timer countdown, deletes the DOM elements that we just created, and a function that replaces them with newly created elements in quiz format, while adding 1 to the question card data, so we can iterate through the list of objects that represent each "slide"
 
 //Initialization
-startQuiz();
+loadPage();
+//User Interactions
