@@ -60,9 +60,7 @@ function loadPage() {
   buttonEl.textContent = "Start Quiz";
   contentEl.appendChild(buttonEl);
 
-  buttonEl.addEventListener("click", function () {
-    startQuiz();
-  });
+  buttonEl.addEventListener("click", startQuiz);
 }
 
 //function to start a timer
@@ -87,26 +85,99 @@ function deleteChildren() {
   }
 }
 
+//function for when next is clicked, if questionnumber does not = objects.length build another question slide, if it does === objects.length, delete elements and create a highscore page
+function nextSlide() {
+  if (questionNumber !== objects.length) {
+    deleteChildren();
+
+    createSlide(questionNumber, objects);
+  } else {
+    deleteChildren();
+    //function to create highscore page
+    submitScorePage();
+  }
+}
+
+function submitScorePage() {
+  var headerEl = document.createElement(`h1`);
+  headerEl.setAttribute("id", "submit-header");
+  headerEl.textContent = "All done! Submit your score below";
+  contentEl.appendChild(headerEl);
+
+  var paraEl = document.createElement(`p`);
+  paraEl.setAttribute("id", "submit-para");
+  paraEl.innerHTML = `Your scores: <p> Correct: ${correctAnswers} </p> <p> Incorrect: ${incorrectAnswers}`;
+  contentEl.appendChild(paraEl);
+
+  var inputEl = document.createElement("input");
+  inputEl.type = "text";
+  inputEl.setAttribute("id", "input");
+  contentEl.appendChild(inputEl);
+
+  var submitButton = document.createElement("button");
+  submitButton.textContent = "Submit";
+  submitButton.setAttribute("id", "submit-button");
+  contentEl.appendChild(submitButton);
+
+  var paraEl2 = document.createElement(`p`);
+  paraEl2.setAttribute("id", "submit-para2");
+  paraEl2.innerHTML = `Please type your initials into the input field, then press submit to save your highscore.`;
+  contentEl.appendChild(paraEl2);
+}
+
+//self explanitory
+function addOne() {
+  questionNumber++;
+}
+
 //function to check if event text === question answer, if so, display correct message, if not, display incorrect message
 function correctOrNot(questionAnswer, questionExplanation, textContent) {
   //   console.log(textContent);
   if (questionAnswer === textContent) {
     var correct = document.createElement("p");
-    correct.textContent =
-      "You are CORRECT! \n Explanation: " + questionExplanation;
+    correct.innerHTML = `<p>You are CORRECT!</p> 
+      <p>Explanation: ${questionExplanation}</p>`;
     correct.setAttribute("id", "correct-answer");
     contentEl.appendChild(correct);
+
+    //build next button
+    var nextButton = document.createElement("button");
+    nextButton.textContent = "NEXT";
+    nextButton.setAttribute("id", "next-button");
+    contentEl.appendChild(nextButton);
+    //data
+    correctAnswers++;
+    //event listener
+    nextButton.addEventListener("click", nextSlide);
   } else {
     var incorrect = document.createElement("p");
-    incorrect.textContent =
-      "You are INCORRECT! \n Explanation: " + questionExplanation;
+    incorrect.innerHTML = `<p>You are INCORRECT!</p> 
+    <p>Explanation: ${questionExplanation}</p>`;
     incorrect.setAttribute("id", "incorrect-answer");
     contentEl.appendChild(incorrect);
+
+    //build next button
+    var nextButton = document.createElement("button");
+    nextButton.textContent = "NEXT";
+    nextButton.setAttribute("id", "next-button");
+    contentEl.appendChild(nextButton);
+    //data
+    incorrectAnswers++;
+    //subtract seconds
+    timeLeft = timeLeft - 10;
+    console.log(timeLeft);
+    //set element
+    timerEl.textContent = "Time Left: " + timeLeft;
+    //event listener
+    nextButton.addEventListener("click", nextSlide);
   }
 }
 
 //function to create elements with content based on which question slide we are on
 function createSlide(questionNumber, questionInfo) {
+  //adds 1 to slide counter
+  addOne();
+
   //create question
   var headerEl = document.createElement("h1");
   headerEl.textContent = questionInfo[questionNumber]["question"];
@@ -158,11 +229,6 @@ function createSlide(questionNumber, questionInfo) {
   buttonD.addEventListener("click", function () {
     correctOrNot(questionAnswer, questionExplanation, buttonDtext);
   });
-
-  //adds 1 to slide counter
-  questionNumber++;
-
-  //if questionnumber === objects.length build highscore page
 }
 
 function startQuiz() {
