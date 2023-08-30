@@ -60,7 +60,9 @@ function loadPage() {
   buttonEl.textContent = "Start Quiz";
   contentEl.appendChild(buttonEl);
 
-  buttonEl.addEventListener("click", startQuiz);
+  buttonEl.addEventListener("click", function () {
+    startQuiz();
+  });
 }
 
 //function to start a timer
@@ -74,7 +76,6 @@ function startTime() {
       // Stops execution of action at set interval
       clearInterval(timerInterval);
     }
-    console.log(timeLeft);
   }, 1000);
   return timerInterval;
 }
@@ -86,14 +87,28 @@ function deleteChildren() {
   }
 }
 
+//function to check if event text === question answer, if so, display correct message, if not, display incorrect message
+function correctOrNot(questionAnswer, questionExplanation, textContent) {
+  //   console.log(textContent);
+  if (questionAnswer === textContent) {
+    var correct = document.createElement("p");
+    correct.textContent =
+      "You are CORRECT! \n Explanation: " + questionExplanation;
+    correct.setAttribute("id", "correct-answer");
+    contentEl.appendChild(correct);
+  } else {
+    var incorrect = document.createElement("p");
+    incorrect.textContent =
+      "You are INCORRECT! \n Explanation: " + questionExplanation;
+    incorrect.setAttribute("id", "incorrect-answer");
+    contentEl.appendChild(incorrect);
+  }
+}
+
 //function to create elements with content based on which question slide we are on
 function createSlide(questionNumber, questionInfo) {
-  //store question answer and explanation
-  var questionAnswer = questionInfo[questionNumber]["answer"];
-  var questionExplanation = questionInfo[questionNumber]["explanation"];
-
-  var headerEl = document.createElement("h1");
   //create question
+  var headerEl = document.createElement("h1");
   headerEl.textContent = questionInfo[questionNumber]["question"];
   headerEl.setAttribute("id", "slide-question");
   contentEl.appendChild(headerEl);
@@ -119,7 +134,30 @@ function createSlide(questionNumber, questionInfo) {
   buttonD.setAttribute("id", "slide-button");
   contentEl.appendChild(buttonD);
 
+  //store question answer and explanation, along with button text data
+  var questionAnswer = questionInfo[questionNumber]["answer"];
+  var questionExplanation = questionInfo[questionNumber]["explanation"];
+  var buttonAtext = questionInfo[questionNumber]["a"];
+  var buttonBtext = questionInfo[questionNumber]["b"];
+  var buttonCtext = questionInfo[questionNumber]["c"];
+  var buttonDtext = questionInfo[questionNumber]["d"];
+
   //if user clicks correct answer, display congradulatory message under buttons
+  buttonA.addEventListener("click", function () {
+    correctOrNot(questionAnswer, questionExplanation, buttonAtext);
+  });
+
+  buttonB.addEventListener("click", function () {
+    correctOrNot(questionAnswer, questionExplanation, buttonBtext);
+  });
+
+  buttonC.addEventListener("click", function () {
+    correctOrNot(questionAnswer, questionExplanation, buttonCtext);
+  });
+
+  buttonD.addEventListener("click", function () {
+    correctOrNot(questionAnswer, questionExplanation, buttonDtext);
+  });
 
   //adds 1 to slide counter
   questionNumber++;

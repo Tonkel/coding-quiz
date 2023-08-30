@@ -66,3 +66,25 @@ header {
   border-radius: 10px;
   text-align: left;
 }
+
+#slide-button:hover {
+  opacity: 0.5;
+}
+
+#correct-answer {
+  color: lightslategrey;
+  align-self: flex-start;
+  text-align: left;
+  margin-top: 5px;
+  padding-top: 5px;
+  border-top: 3px solid lightslategray;
+}
+
+#incorrect-answer {
+  color: lightslategrey;
+  align-self: flex-start;
+  text-align: left;
+  margin-top: 5px;
+  padding-top: 5px;
+  border-top: 3px solid lightslategray;
+}
