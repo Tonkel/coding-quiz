@@ -38,6 +38,39 @@ var objects = [
     explanation:
       "A block of statement can be understand as the set of the zero or more statements. In general, a block of statement has common definition which combines one or a number of statements into a single statement for ease.",
   }),
+  (obj3 = {
+    question:
+      "Which of the following variables takes precedence over the others if the names are the same?",
+    a: "Global variable",
+    b: "The local element",
+    c: "The two of the above",
+    d: "None of the above",
+    answer: "The local element",
+    explanation:
+      "In JavaScript, the local variable takes precedence over the global variable if the name of both local and global variables is the same.",
+  }),
+  (obj4 = {
+    question:
+      "Which one of the following is the correct way for calling the JavaScript code?",
+    a: "Preprocessor",
+    b: "Triggering Event",
+    c: "RMI",
+    d: "Function/Method",
+    answer: "Function/Method",
+    explanation:
+      "The JavaScript code can be called simply by making the function call to the element on which the JavaScript code execution has to be run. There are several other ways to call JavaScript code such as submit, onclick, and onload, etc.",
+  }),
+  (obj5 = {
+    question:
+      "In the JavaScript, which one of the following is not considered as an error:",
+    a: "Syntax error",
+    b: "Missing of semicolons",
+    c: "Division by zero",
+    d: "Missing of Bracket",
+    answer: "Division by zero",
+    explanation:
+      " Yes, you heard right that division of any integer by zero is not an error in the JavaScript. It just prints the infinity as a result. However, there is an exception in JavaScript, dividing zero with zero will not have any defined number/value so, the result of this specific operation is a special value 'Not a Number' (or NaN) and printed as NaN.",
+  }),
 ];
 
 //Functions
