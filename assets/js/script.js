@@ -228,7 +228,7 @@ function storeHighscore() {
     //reset local storage
     localStorage.setItem("initials", "");
     localStorage.setItem("correct", 0);
-    localStorage.setItem("incorrect", hSco0relosses);
+    localStorage.setItem("incorrect", 0);
   });
 }
 
