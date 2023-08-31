@@ -3,11 +3,16 @@ var highscoreEl = document.querySelector("#highscore-btn");
 var timerEl = document.querySelector("#timer");
 var contentEl = document.querySelector("#content");
 var startQuizEl = document.querySelector("#start-button");
+
 //Data
 var correctAnswers = 0;
 var incorrectAnswers = 0;
 var questionNumber = 0;
 var timeLeft = 60;
+//data for highscore
+var hScoreWins = 0;
+var hScorelosses = 0;
+var hScoreInitials = "";
 //save so can stop timer when required
 var stopTime;
 var objects = [
@@ -73,6 +78,8 @@ function startTime() {
     if (timeLeft === 0) {
       // Stops execution of action at set interval
       clearInterval(timerInterval);
+      //you lose function
+      youLose();
     }
   }, 1000);
   return timerInterval;
@@ -92,6 +99,9 @@ function nextSlide() {
 
     createSlide(questionNumber, objects);
   } else {
+    //stop timer
+    clearInterval(stopTime);
+    //clear page
     deleteChildren();
     //function to create highscore page
     submitScorePage();
@@ -123,6 +133,70 @@ function submitScorePage() {
   paraEl2.setAttribute("id", "submit-para2");
   paraEl2.innerHTML = `Please type your initials into the input field, then press submit to save your highscore.`;
   contentEl.appendChild(paraEl2);
+
+  //event listener
+  submitButton.addEventListener("click", storeHighscore);
+}
+
+//function that creates simple highscore page, stores the highscore, and displays it
+function storeHighscore() {
+  //modify highscore data
+  hScoreInitials = document.getElementById("input").value;
+  hScoreWins = correctAnswers;
+  hScorelosses = incorrectAnswers;
+
+  //clear page
+  deleteChildren();
+
+  //push values to local storage
+  localStorage.setItem("initials", hScoreInitials);
+  localStorage.setItem("correct", hScoreWins);
+  localStorage.setItem("incorrect", hScorelosses);
+  //create elements
+  var headerEl = document.createElement(`h1`);
+  headerEl.setAttribute("id", "highscore-header");
+  headerEl.textContent = "Highscore:";
+  contentEl.appendChild(headerEl);
+
+  var paraEl = document.createElement(`p`);
+  paraEl.setAttribute("id", "submit-para");
+  paraEl.innerHTML = `Highscore: ${hScoreInitials} Correct: ${hScoreWins} Incorrect: ${hScorelosses}`;
+  contentEl.appendChild(paraEl);
+
+  var buttonEl = document.createElement("button");
+  buttonEl.setAttribute("id", "go-back-button");
+  buttonEl.setAttribute("type", "button");
+  buttonEl.textContent = "Go Back";
+  contentEl.appendChild(buttonEl);
+
+  var buttonEl2 = document.createElement("button");
+  buttonEl2.setAttribute("id", "clear-button");
+  buttonEl2.setAttribute("type", "button");
+  buttonEl2.textContent = "Clear Highscores";
+  contentEl.appendChild(buttonEl2);
+
+  buttonEl.addEventListener("click", function () {
+    //clear page
+    deleteChildren();
+    //reset time
+    timeLeft = 60;
+    //reset question index
+    questionNumber = 0;
+    //reset correct/incorrect count
+    correctAnswers = 0;
+    incorrectAnswers = 0;
+    //start again
+    loadPage();
+  });
+
+  buttonEl2.addEventListener("click", function () {
+    //clear highscore text
+    paraEl.innerHTML = "";
+    //reset local storage
+    localStorage.setItem("initials", "");
+    localStorage.setItem("correct", 0);
+    localStorage.setItem("incorrect", hSco0relosses);
+  });
 }
 
 //self explanitory
@@ -231,9 +305,43 @@ function createSlide(questionNumber, questionInfo) {
   });
 }
 
+//function for if timer hits 0
+function youLose() {
+  //clear page
+  deleteChildren();
+  //build h1
+  var headerEl = document.createElement("h1");
+  headerEl.textContent = "YOU LOSE!!!";
+  headerEl.setAttribute("id", "start-header");
+  contentEl.appendChild(headerEl);
+  //build button
+  var buttonEl = document.createElement("button");
+  buttonEl.setAttribute("id", "go-back-button");
+  buttonEl.setAttribute("type", "button");
+  buttonEl.textContent = "Go Back";
+  contentEl.appendChild(buttonEl);
+  //user stuff
+  buttonEl.addEventListener("click", function () {
+    //clear page
+    deleteChildren();
+    //reset time
+    timeLeft = 60;
+    //reset question index
+    questionNumber = 0;
+    //reset correct/incorrect count
+    correctAnswers = 0;
+    incorrectAnswers = 0;
+    //start again
+    loadPage();
+  });
+}
+
 function startQuiz() {
   //start timer and store interval for later
   stopTime = startTime();
+
+  // var timerEl = document.getElementById("timer");
+  // timerEl.textContent = `Time Left: ${stopTime}`;
 
   //delete elements
   deleteChildren();
@@ -241,7 +349,6 @@ function startQuiz() {
   //create new slide
   createSlide(questionNumber, objects);
 }
-//create a function that starts the timer countdown, deletes the DOM elements that we just created, and a function that replaces them with newly created elements in quiz format, while adding 1 to the question card data, so we can iterate through the list of objects that represent each "slide"
 
 //Initialization
 loadPage();
